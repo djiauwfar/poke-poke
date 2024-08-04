@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Font Awesome -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <style>
+    body {
+      overflow-x: hidden;
+      /* Prevent horizontal scroll when sidebar is collapsed */
+      margin: 0;
+      padding: 0;
+    }
+
+    #sidebar {
+      transition: all 0.3s ease;
+      width: 250px;
+      height: 100vh;
+      overflow-y: auto;
+      /* Enable vertical scrolling */
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      z-index: 9999;
+    }
+
+    #sidebar.collapsed {
+      width: 80px;
+    }
+
+    #sidebar .sidebar-toggle {
+      margin: 10px;
+      display: block;
+    }
+
+    #sidebar .nav-link {
+      padding: 10px;
+    }
+
+    #sidebar.collapsed .nav-link {
+      text-align: center;
+      padding: 0;
+    }
+
+    #sidebar.collapsed .nav-link img {
+      width: 40px;
+      /* Size of Pokémon icons in minimized state */
+      height: 40px;
+      display: block;
+      margin: auto;
+    }
+
+    #sidebar.collapsed .nav-link span {
+      display: none;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px;
+    }
+
+    .sidebar-header i {
+      font-size: 2rem;
+      /* Adjust size as needed */
+    }
+
+    .main-content {
+      margin-left: 250px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.expanded {
+      margin-left: 80px;
+    }
+
+    .video-container {
+      display: none;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    footer {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    #sidebar-button {
+      background-color: white;
+    }
+
+    #pokemon-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      /* Two columns */
+      gap: 10px;
+      /* Spacing between Pokémon items */
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    #sidebar.collapsed #pokemon-list {
+      grid-template-columns: 1fr;
+      /* One column */
+    }
+
+    #pokemon-list .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fff;
+    }
+
+    #pokemon-list .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    #pokemon-list .nav-link img {
+      width: 50px;
+      /* Adjust Pokémon icon size */
+      height: 50px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar">
+    <button id="sidebar-button" class="sidebar-toggle">
+      <img width="30" height="30"
+        src="https://i.etsystatic.com/29758262/r/il/5244a5/4041853302/il_300x300.4041853302_jg3g.jpg" />
+    </button>
+    <div class="sidebar-sticky">
+      <div class="sidebar-header">
+        <i class="fas fa-pokeball"></i> <!-- Pokéball icon -->
+      </div>
+      <ul id="pokemon-list" class="nav flex-column"></ul>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <main class="col-md-12 px-4">
+          <div class="d-flex justify-content-between">
+            <h1 id="pokemon-name">Pilih Pokémon</h1>
+          </div>
+          <div id="pokemon-details" class="my-4"></div>
+          <div id="pokemon-image-container" class="text-center my-4">
+            <img width="200px" id="pokemon-image" class="img-fluid" src="" alt="Pokémon Image" />
+          </div>
+          <!-- Video container for home screen -->
+          <div class="video-container">
+            <h2>Welcome to the Pokédex!</h2>
+            <iframe width="80%" height="450" src="https://www.youtube.com/embed/-nYnqHUHmow" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#contactModal">
+      Contact Us
+    </button>
+    <p class="mt-2">Made by Farandi Angesti, Universitas Siber Asia</p>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactModalLabel">Contact Us</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="contact-form">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" class="form-control" id="phone" required>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-block">Send</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+
+</html>
